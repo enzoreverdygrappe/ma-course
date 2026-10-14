@@ -1,0 +1,17 @@
+{
+  "name": "Course",
+  "short_name": "Course",
+  "description": "Ta séance Kotcha du jour, ta forme WHOOP et une boucle de la bonne distance au départ de chez toi.",
+  "lang": "fr",
+  "start_url": "./#/today",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

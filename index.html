@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Course</title>
+  <meta name="description" content="Ta séance Kotcha du jour, ta forme WHOOP et une boucle de la bonne distance au départ de chez toi.">
+  <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Course">
+  <meta name="robots" content="noindex">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+  <header class="top">
+    <div class="top-text">
+      <span id="subtitle" class="top-sub"></span>
+      <h1 id="title" class="top-title">Course</h1>
+    </div>
+    <button type="button" class="icon-btn glass" data-action="open-settings" aria-label="Réglages">
+      <svg class="ico" viewBox="0 0 56 56" aria-hidden="true" fill="currentColor"><circle cx="16" cy="28" r="4"/><circle cx="28" cy="28" r="4"/><circle cx="40" cy="28" r="4"/></svg>
+    </button>
+  </header>
+  <main id="view" class="view stack"></main>
+  <nav id="tabs" class="tabs glass" aria-label="Navigation principale"></nav>
+  <div id="scrim" class="scrim" hidden></div>
+  <section id="settings" class="sheet" hidden aria-label="Réglages"></section>
+  <div id="toast" class="toast glass" role="status" hidden></div>
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

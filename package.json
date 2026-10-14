@@ -1,0 +1,12 @@
+{
+  "name": "ma-course",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "dev": "node scripts/dev-server.mjs"
+  },
+  "dependencies": {
+    "@vercel/blob": "2.7.0"
+  }
+}
