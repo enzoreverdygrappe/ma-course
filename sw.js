@@ -1,7 +1,7 @@
 // Offline app shell. Bump VERSION on every deploy so phones pick up the new files.
 // Data (/api/), map tiles, routing and weather are never cached here.
 
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = `ma-course-${VERSION}`;
 const SHELL = [
   './',
@@ -16,10 +16,12 @@ const SHELL = [
   './js/core/workouts.js',
   './js/core/analysis.js',
   './js/core/loop.js',
+  './js/core/origin.js',
   './js/services/api.js',
   './js/services/weather.js',
   './js/services/router.js',
   './js/services/history.js',
+  './js/services/geocode.js',
   './js/ui/dom.js',
   './js/ui/icons.js',
   './js/ui/today.js',
@@ -27,6 +29,7 @@ const SHELL = [
   './js/ui/week.js',
   './js/ui/settings.js',
   './js/ui/map.js',
+  './js/ui/origin-sheet.js',
   './icons/icon.svg',
   './icons/icon-180.png',
   './icons/icon-192.png',

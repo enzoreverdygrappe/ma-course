@@ -2,12 +2,12 @@
 
 import { durationText, kmText, paceText } from '../core/format.js';
 import { KINDS, canUseWorkout, deriveSession } from '../core/session.js';
+import { originLabel } from '../core/origin.js';
 import { todaysWorkouts } from '../core/workouts.js';
 import { esc, icon, segmented } from './dom.js';
 
 const KIND_OPTIONS = Object.entries(KINDS).map(([id, label]) => ({ id, label }));
 const MODE_OPTIONS = [{ id: 'duration', label: 'Durée' }, { id: 'distance', label: 'Distance' }];
-const ORIGIN_OPTIONS = [{ id: 'home', label: 'Maison' }, { id: 'here', label: 'Ma position' }];
 const NOTE_ICONS = { summary: 'flag', good: 'good', info: 'info', warn: 'warn' };
 
 export const loopShell = () => `
@@ -54,7 +54,10 @@ function formCard(state) {
     ${main}
     ${stepper('pace', paceText(values.pace), '/km', 'Allure')}
     <div class="form-result"><span class="muted">Estimation</span><span class="num">${result}</span></div>
-    <div class="origin-row"><span class="stepper-label">${icon('location')}Départ</span>${segmented('origin', ORIGIN_OPTIONS, state.origin)}</div>
+    <button type="button" class="origin-row" data-action="open-origin" aria-label="Choisir le départ">
+      <span class="stepper-label">${icon(state.origin.type === 'home' ? 'house' : 'location')}Départ</span>
+      <span class="origin-value">${esc(originLabel(state.origin, state.data?.home))}</span>${icon('chevron', 'origin-chevron')}
+    </button>
   </article>`;
 }
 

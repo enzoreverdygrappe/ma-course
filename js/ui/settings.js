@@ -16,20 +16,23 @@ export function renderSettings(state, today) {
       <button type="button" class="icon-btn glass" data-action="close-settings" aria-label="Fermer">${icon('close')}</button></header>
     <h3 class="section-title">Synchronisation</h3>
     <div class="card list-card">
-      ${row('Reçu du Mac', age(data.received_at))}
-      ${row('Séances Kotcha', `${(data.workouts || []).length} · ${age(data.workouts_updated_at)}`)}
-      ${row('WHOOP', lastWhoop ? `${esc(dayLabel(lastWhoop.date, today))} · ${age(data.whoop_updated_at)}` : 'aucune donnée')}
+      ${row('Dernière mise à jour', age(data.received_at))}
+      ${row('Séances Kotcha', data.errors?.garmin ? `<span class="s-warn">${esc(data.errors.garmin)}</span>` : `${(data.workouts || []).length} · ${age(data.workouts_updated_at)}`)}
+      ${row('WHOOP', data.errors?.whoop ? `<span class="s-warn">${esc(data.errors.whoop)}</span>` : (lastWhoop ? `${esc(dayLabel(lastWhoop.date, today))} · ${age(data.whoop_updated_at)}` : 'aucune donnée'))}
+      <button type="button" class="s-row s-action" data-action="refresh" ${state.refreshing ? 'disabled' : ''}>${state.refreshing ? '<span class="spinner" aria-hidden="true"></span>Mise à jour…' : `${icon('refresh')}Actualiser maintenant`}</button>
     </div>
-    <p class="footnote">Kotcha → Garmin Connect → Mac (pi-tracker, chaque heure) → cette app. Le WHOOP passe aussi par le Mac.</p>
+    <p class="footnote">Kotcha → Garmin Connect → Vercel, sans le Mac : à chaque ouverture de l’app (si les données ont plus de 20 min) et chaque matin. Le WHOOP aussi.</p>
     <h3 class="section-title">Départ</h3>
     <div class="card list-card">
-      ${row(`${icon('house')}${esc(data.home?.label || 'Maison')}`, data.home ? 'reçu du Mac' : 'non configuré')}
+      ${row(`${icon('location')}Départ actuel`, esc(state.originLabel || 'Ma position'))}
+      <button type="button" class="s-row s-action" data-action="open-origin">${icon('search')}Choisir une adresse</button>
     </div>
-    <p class="footnote">Le départ « Maison » vient de RUN_HOME_* dans le .env de pi-tracker. « Ma position » utilise le GPS de l’iPhone.</p>
+    <p class="footnote">« Ma position » utilise le GPS de l’iPhone. Les adresses viennent de la Base Adresse Nationale (IGN).</p>
     <h3 class="section-title">Sources</h3>
     <div class="card list-card">
       ${row('Itinéraires', 'OpenStreetMap · OSRM')}
       ${row('Météo', 'Open-Meteo')}
+      ${row('Adresses', 'Géoplateforme IGN')}
     </div>
     <div class="card list-card">
       <button type="button" class="s-row s-danger" data-action="logout">${icon('lock')}Oublier le code sur cet appareil</button>

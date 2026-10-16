@@ -1,6 +1,7 @@
-// Loops traced on this phone and the form preferences (localStorage, per device).
+// Loops traced on this phone, the form preferences and recent start addresses (localStorage, per device).
 
 import { restoreForm } from '../core/session.js';
+import { restoreOrigin, restorePlaces } from '../core/origin.js';
 
 const HISTORY_KEY = 'ma-course:history';
 const PREFS_KEY = 'ma-course:prefs';
@@ -27,7 +28,7 @@ export const saveHistory = (history) => save(HISTORY_KEY, history);
 
 export function loadPrefs() {
   const prefs = load(PREFS_KEY) || {};
-  return { form: restoreForm(prefs.form), origin: prefs.origin === 'here' ? 'here' : 'home' };
+  return { form: restoreForm(prefs.form), origin: restoreOrigin(prefs.origin), places: restorePlaces(prefs.places) };
 }
 
-export const savePrefs = ({ form, origin }) => save(PREFS_KEY, { form, origin });
+export const savePrefs = ({ form, origin, places }) => save(PREFS_KEY, { form, origin, places });

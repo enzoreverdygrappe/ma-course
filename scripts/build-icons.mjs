@@ -19,6 +19,7 @@ const MAP = {
   sun: 'sun_max_fill', moon: 'moon_fill', cloudSun: 'cloud_sun_fill', cloudMoon: 'cloud_moon_fill',
   cloud: 'cloud_fill', fog: 'cloud_fog_fill', drizzle: 'cloud_drizzle_fill', rain: 'cloud_rain_fill',
   heavyRain: 'cloud_heavyrain_fill', snow: 'cloud_snow_fill', storm: 'cloud_bolt_rain_fill',
+  search: 'search', clock: 'clock',
 };
 
 const [dir] = process.argv.slice(2);

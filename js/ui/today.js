@@ -98,7 +98,7 @@ function adviceCard(state, whoop, today, now) {
 
 function weatherCard(state) {
   if (!state.weather) {
-    const message = state.weatherError || (state.data?.home ? 'Chargement de la météo…' : 'Météo dès que le départ est connu.');
+    const message = state.weatherError || 'Chargement de la météo…';
     return `<article class="card weather"><span class="tile-label">${icon('cloudSun')}Météo</span><p class="muted">${esc(message)}</p></article>`;
   }
   const { current, hourly } = state.weather;
@@ -120,10 +120,20 @@ function weatherCard(state) {
   </article>`;
 }
 
+/** Sources that failed at the last refresh, in plain words. */
+export function sourceErrors(data) {
+  const errors = data?.errors || {};
+  return [errors.garmin && 'Kotcha (Garmin)', errors.whoop && 'WHOOP'].filter(Boolean);
+}
+
 export function syncLine(state) {
-  if (state.dataError) return `<p class="sync-line warn">${icon('wifiOff')}${esc(state.dataError)}</p>`;
+  if (state.refreshing) return '<p class="sync-line"><span class="spinner" aria-hidden="true"></span>Mise à jour Kotcha et WHOOP…</p>';
+  const failed = sourceErrors(state.data);
+  const warn = state.dataError || (failed.length ? `${failed.join(' et ')} : dernière mise à jour en échec` : '');
   const at = state.data?.received_at;
-  return at ? `<p class="sync-line">${icon('refresh')}Synchronisé depuis le Mac ${esc(ageText(at))}</p>` : '';
+  const text = warn || (at ? `Mis à jour ${ageText(at)}` : 'Pas encore de données');
+  return `<button type="button" class="sync-line${warn ? ' warn' : ''}" data-action="refresh">
+    ${icon(warn ? 'warn' : 'refresh')}<span>${esc(text)}</span><b>Actualiser</b></button>`;
 }
 
 export function renderToday(state, today, now) {

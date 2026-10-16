@@ -48,11 +48,30 @@ await step('opens Today with WHOOP, advice and weather', async () => {
   await shot('02-aujourdhui');
 });
 
+await step('refreshes Kotcha and WHOOP from Vercel on demand', async () => {
+  await page.click('.sync-line[data-action="refresh"]');
+  await page.locator('.sync-line', { hasText: 'Mis à jour' }).waitFor({ timeout: 45000 });
+  assert.equal(await page.locator('.sync-line.warn').count(), 0, await page.locator('.sync-line').textContent());
+});
+
+const pickOrigin = async (selector) => {
+  await page.click('.origin-row[data-action="open-origin"]');
+  await page.locator('.sheet.open #origin-search').waitFor();
+  await page.waitForTimeout(350);
+  if (selector) await page.click(selector);
+  await page.locator('.sheet.open').waitFor({ state: 'detached', timeout: 3000 }).catch(() => {});
+  await page.waitForTimeout(400);
+};
+
 await step('traces a loop of the right distance and links Google Maps', async () => {
   await page.click('a[href="#/loop"]');
   await page.locator('.form-card').waitFor();
   await page.click('[data-seg="mode"][data-value="distance"]');
-  await page.click('[data-seg="origin"][data-value="home"]');
+  await pickOrigin(null);
+  const homeLabel = await page.locator('[data-kind="home"] .place-text b').textContent();
+  await page.click('[data-action="pick-origin"][data-kind="home"]');
+  await page.waitForTimeout(400);
+  assert.equal(await page.locator('.origin-value').textContent(), homeLabel);
   const target = Number((await page.locator('.stepper-value').first().textContent()).replace(/[^\d,]/g, '').replace(',', '.'));
   await page.click('[data-action="plan"]');
   await page.locator('#map-badge:not([hidden])').waitFor({ timeout: 60000 });
@@ -67,10 +86,31 @@ await step('traces a loop of the right distance and links Google Maps', async ()
   process.stdout.write(`  boucle de ${km} km pour ${target} km demandés\n`);
 });
 
-await step('loop from the current GPS position', async () => {
-  await page.click('[data-seg="origin"][data-value="here"]');
+await step('searches an address and starts the loop there', async () => {
+  await pickOrigin(null);
+  await page.fill('#origin-search', '10 rue de rivoli paris');
+  await page.locator('[data-action="pick-origin"][data-kind="result"]').first().waitFor({ timeout: 15000 });
+  await page.waitForTimeout(300);
+  await shot('03b-depart-recherche');
+  await page.click('[data-action="pick-origin"][data-kind="result"] >> nth=0');
+  await page.waitForTimeout(400);
+  assert.match(await page.locator('.origin-value').textContent(), /Rivoli/);
+  await page.click('[data-action="plan"]');
+  await page.locator('.map-badge .eyebrow', { hasText: 'Rivoli' }).waitFor({ timeout: 60000 });
+  await page.waitForTimeout(1200);
+  await shot('03c-boucle-adresse');
+});
+
+await step('loop from the current GPS position, the address stays in recents', async () => {
+  await pickOrigin('[data-action="pick-origin"][data-kind="here"]');
   await page.click('[data-action="plan"]');
   await page.locator('.map-badge .eyebrow', { hasText: 'Ma position' }).waitFor({ timeout: 60000 });
+  await pickOrigin(null);
+  await page.locator('[data-kind="recent"]', { hasText: 'Rivoli' }).waitFor();
+  assert.equal(await page.locator('[data-kind="here"].selected').count(), 1);
+  await shot('03d-depart-recents');
+  await page.click('.sheet.open [data-action="close-settings"]');
+  await page.waitForTimeout(400);
 });
 
 await step('week lists 7 days and the traced loops', async () => {
@@ -86,7 +126,8 @@ await step('settings sheet shows sync status', async () => {
   await page.click('[data-action="open-settings"]');
   await page.locator('.sheet.open').waitFor();
   await page.waitForTimeout(400);
-  await page.getByText('Reçu du Mac', { exact: true }).waitFor();
+  await page.getByText('Dernière mise à jour', { exact: true }).waitFor();
+  await page.getByText('Actualiser maintenant').waitFor();
   await shot('05-reglages');
   await page.click('[data-action="close-settings"]');
 });
@@ -94,7 +135,7 @@ await step('settings sheet shows sync status', async () => {
 await step('a Kotcha workout today pre-fills the loop in one tap (light mode)', async () => {
   const light = await newPage('light');
   const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Paris' });
-  await light.route('**/api/state', (route) => route.fulfill({
+  await light.route('**/api/{state,refresh}', (route) => route.fulfill({
     contentType: 'application/json',
     body: JSON.stringify({ success: true, error: null, data: {
       received_at: new Date().toISOString(),

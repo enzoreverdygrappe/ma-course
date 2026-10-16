@@ -314,8 +314,24 @@ body.is-locked .top, body.is-locked .tabs { display: none; }
 .h-temp { font-size: 16px; font-weight: 600; }
 .h-rain { min-height: 1em; font-size: 11px; font-weight: 700; color: var(--info); }
 
-.sync-line { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 4px 0 0; color: var(--text-3); font-size: 13px; }
+.sync-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  color: var(--text-3);
+  font: inherit;
+  font-size: 13px;
+}
+.sync-line b { color: var(--accent-ink); font-weight: 600; }
 .sync-line.warn { color: var(--warn); }
+.sync-line .spinner { width: 14px; height: 14px; border-width: 2px; }
 
 /* ---------------------------------------------------------- buttons */
 
@@ -433,7 +449,27 @@ body.is-locked .top, body.is-locked .tabs { display: none; }
 
 .stepper-row, .origin-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .stepper-label { display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 500; }
-.origin-row .seg { flex: 0 1 230px; }
+.origin-row {
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.origin-value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-2);
+  font-size: 16px;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.origin-chevron { flex: none; width: 15px; height: 15px; color: var(--text-3); }
 .stepper { display: flex; align-items: center; gap: 6px; }
 .stepper-value { min-width: 100px; text-align: center; font-size: 30px; font-weight: 700; }
 .step-btn {
@@ -568,6 +604,59 @@ body.is-locked .top, body.is-locked .tabs { display: none; }
 .s-row + .s-row { border-top: 1px solid var(--sep); }
 .s-row .muted { text-align: right; font-size: 15px; }
 .s-danger { justify-content: flex-start; gap: 8px; color: var(--zone-red); font-weight: 500; }
+.s-action { justify-content: flex-start; gap: 8px; color: var(--accent-ink); font-weight: 500; }
+.s-action .spinner { width: 16px; height: 16px; border-width: 2px; }
+.s-warn { color: var(--warn); }
+
+/* ------------------------------------------------------ start picker */
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  margin: 4px 0 14px;
+  padding: 0 14px;
+  border-radius: 14px;
+  background: var(--fill);
+  color: var(--text-2);
+}
+.search-field:focus-within { box-shadow: inset 0 0 0 2px var(--accent-ink); }
+.search-field input {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 17px;   /* 16px+ stops iOS from zooming on focus */
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.search-field input::-webkit-search-cancel-button { display: none; }
+#origin-results:not(:empty) { margin-bottom: 14px; }
+#origin-results .footnote { display: flex; align-items: center; gap: 8px; margin-top: 0; }
+#origin-results .spinner { width: 14px; height: 14px; border-width: 2px; }
+.place-row { justify-content: flex-start; min-height: 58px; color: var(--text); }
+.place-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--fill);
+  color: var(--text-2);
+}
+.place-icon .ico { width: 16px; height: 16px; }
+.place-row.selected .place-icon { background: var(--accent); color: var(--on-accent); }
+.place-text { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.place-text b, .place-text small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.place-text b { font-weight: 500; }
+.place-text small { color: var(--text-2); font-size: 13px; }
+.place-check { flex: none; width: 18px; height: 18px; color: var(--accent-ink); }
 .footnote { margin: 8px 18px 0; color: var(--text-2); font-size: 13px; }
 .footnote.center { text-align: center; margin-top: 18px; }
 

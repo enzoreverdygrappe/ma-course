@@ -1,4 +1,4 @@
-// Local dev server: static files + a fake /api/state built from pi-tracker's local data.
+// Local dev server: static files + fake /api/state and /api/refresh built from pi-tracker's local data.
 // Usage: npm run dev  ->  http://localhost:5191  (code d'accès : "dev")
 
 import { createServer } from 'node:http';
@@ -26,8 +26,9 @@ async function devState() {
 
 createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
-  if (url.pathname === '/api/state') {
+  if (url.pathname === '/api/state' || url.pathname === '/api/refresh') {
     const ok = req.headers['x-course-code'] === 'dev';
+    if (url.pathname === '/api/refresh') await new Promise((resolve) => { setTimeout(resolve, 600); });
     res.writeHead(ok ? 200 : 401, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify(ok ? { success: true, data: await devState(), error: null } : { success: false, data: null, error: 'Code d’accès incorrect' }));
   }

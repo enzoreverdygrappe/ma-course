@@ -1,9 +1,8 @@
-// Shared by the serverless functions: auth checks, payload validation, blob location.
+// Shared by the serverless functions: auth checks and the whitelist of stored fields.
 // Files starting with "_" are not exposed as routes by Vercel.
 
 import { createHash, timingSafeEqual } from 'node:crypto';
 
-export const STATE_PATH = 'course/state.json';
 const MAX_WORKOUTS = 60;
 const MAX_WHOOP_DAYS = 14;
 const MAX_TEXT = 200;
@@ -51,7 +50,7 @@ function cleanHome(raw) {
   return { lat, lon, label: text(raw.label) || 'Maison' };
 }
 
-/** Whitelists what the Mac sends; throws on a payload that is not the expected shape. */
+/** Whitelists what gets stored and shown; throws on a payload that is not the expected shape. */
 export function cleanState(payload, receivedAt) {
   if (!payload || typeof payload !== 'object' || !Array.isArray(payload.workouts)) {
     throw new Error('Payload invalide : "workouts" manquant');
