@@ -32,7 +32,7 @@ test('labels and points per origin type', () => {
   assert.equal(originLabel({ type: 'home' }, null), 'Maison');
   assert.equal(originLabel(place, home), '10 Rue de Rivoli');
   assert.deepEqual(knownPoint(place, home, null), [48.8555, 2.36041]);
-  assert.deepEqual(knownPoint({ type: 'home' }, home, null), [48.79, 2.39]);
+  assert.deepEqual(knownPoint({ type: 'home' }, home, null), [48.86, 2.35]);
   assert.equal(knownPoint({ type: 'here' }, home, null), null);
   assert.equal(isSameOrigin(place, restoreOrigin({ type: 'place', ...rivoli, label: 'autre' })), true);
   assert.equal(isSameOrigin(place, { type: 'here' }), false);
@@ -41,10 +41,10 @@ test('labels and points per origin type', () => {
 test('normalizePlaces keeps street name + city, or the full label for a town', () => {
   const places = normalizePlaces({ features: [
     { geometry: { coordinates: [2.36041, 48.8555] }, properties: { type: 'housenumber', label: '10 Rue de Rivoli 75004 Paris', name: '10 Rue de Rivoli', postcode: '75004', city: 'Paris' } },
-    { geometry: { coordinates: [2.39, 48.79] }, properties: { type: 'municipality', label: 'Vitry-sur-Seine', context: '94, Val-de-Marne' } },
+    { geometry: { coordinates: [2.4396, 48.8474] }, properties: { type: 'municipality', label: 'Vincennes', context: '94, Val-de-Marne' } },
     { geometry: { coordinates: [2.374677, 48.844162] }, properties: { _type: 'poi', name: ['Gare de Lyon'], category: ['gare voyageurs uniquement', 'transport'], city: ['Paris'] } },
     { geometry: { coordinates: [] }, properties: { label: 'broken' } },
   ] });
-  assert.deepEqual(places, [rivoli, { label: 'Vitry-sur-Seine', detail: '94, Val-de-Marne', lat: 48.86, lon: 2.35 },
+  assert.deepEqual(places, [rivoli, { label: 'Vincennes', detail: '94, Val-de-Marne', lat: 48.8474, lon: 2.4396 },
     { label: 'Gare de Lyon', detail: 'gare voyageurs uniquement · Paris', lat: 48.844162, lon: 2.374677 }]);
 });

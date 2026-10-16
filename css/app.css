@@ -640,7 +640,7 @@ body.is-locked .top, body.is-locked .tabs { display: none; }
 #origin-results .footnote { display: flex; align-items: center; gap: 8px; margin-top: 0; }
 #origin-results .spinner { width: 14px; height: 14px; border-width: 2px; }
 .place-row { justify-content: flex-start; min-height: 58px; color: var(--text); }
-.place-icon {
+.s-row.place-row > .place-icon {   /* must beat .s-row > span:first-child (flex, left-aligned) */
   display: grid;
   flex: none;
   place-items: center;
@@ -650,7 +650,7 @@ body.is-locked .top, body.is-locked .tabs { display: none; }
   background: var(--fill);
   color: var(--text-2);
 }
-.place-icon .ico { width: 16px; height: 16px; }
+.place-icon .ico { width: 17px; height: 17px; }
 .place-row.selected .place-icon { background: var(--accent); color: var(--on-accent); }
 .place-text { display: flex; flex: 1; flex-direction: column; min-width: 0; }
 .place-text b, .place-text small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

@@ -1,7 +1,7 @@
 // Offline app shell. Bump VERSION on every deploy so phones pick up the new files.
 // Data (/api/), map tiles, routing and weather are never cached here.
 
-const VERSION = 'v3';
+const VERSION = 'v4';
 const CACHE = `ma-course-${VERSION}`;
 const SHELL = [
   './',
